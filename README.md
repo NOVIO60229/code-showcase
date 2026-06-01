@@ -1,7 +1,3 @@
-# code-showcase
-
-
-
 ## One-Click Google Sheet Sync Tool
 
 一個 Unity Editor 工具，透過 Google Apps Script (GAS) Web App，讓企劃能一鍵將 Google Sheet 資料同步到 ScriptableObject。
@@ -27,16 +23,17 @@ GoogleSheetSyncTool (Editor ScriptableObject)
 4. **設定同步目標**：將繼承 `GoogleSheetDataBase` 的 ScriptableObject 資產拖入 Targets 列表；同步時會以各資產名稱作為 Sheet Tab 名稱查詢。
 5. **一鍵同步**：點擊 Inspector 中的「**全部同步**」按鈕，工具會依序請求每個工作表的 JSON 並寫回ScriptableObject，完成後顯示成功／失敗統計。
 
-### 技術重點
+### 設計重點
 
-- **`GoogleSheetDataBase`**：抽象方法 `ConvertJsonToData()`保留了反序列化流程的彈性，因應不同表格的需求，最終可以解出不同的資料格式
-- **`#if UNITY_EDITOR`**：所有 Editor 相依程式碼以條件編譯隔離，不影響 Runtime 建置。
+- 抽象方法 `ConvertJsonToData()`保留了反序列化流程的彈性，因應不同表格的需求，最終可以解出不同的資料格式。
+- 保留手動輸入json欄位的可能性，方便在測試環境使用
+- 利用scriptableObject可以創造多份資料的特性，可以按需求分離想要一次同步的資料，並且可以被版本控制管理
 
 ### 檔案說明
 
 | 檔案 | 說明 |
 |---|---|
 | `GoogleSheetDataBase.cs` | 所有可同步資料 SO 的抽象基底類別 |
-| `GoogleSheetSyncTool.cs` | Editor 同步工具主體，含 HTTP 請求邏輯 |
-| `GameResultDataSO.cs` | 範例：遊戲結果資料的具體實作 |
-| `GameResultData.cs` | 範例：對應 Google Sheet 一列的資料模型 |
+| `GoogleSheetSyncTool.cs` | Editor 同步工具主體|
+| `GameResultDataSO.cs` | 範例：遊戲結局資料的具體實作 |
+| `GameResultData.cs` | 範例：遊戲結局資料類別 |
