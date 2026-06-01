@@ -66,9 +66,15 @@ public class GoogleSheetSyncTool : ScriptableObject
                 string json = await client.GetStringAsync(url);
 
                 so.json = json;
-                so.ConvertJsonToData();
-
-                success++;
+                if (so.TryConvertJsonToData())
+                {
+                    success++;
+                }
+                else
+                {
+                    Debug.LogError($"[GoogleSheetSyncTool] JSON 轉換失敗：{so.name}");
+                    failed++;
+                }
             }
             catch (Exception e)
             {

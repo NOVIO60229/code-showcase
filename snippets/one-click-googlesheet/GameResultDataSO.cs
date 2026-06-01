@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -18,11 +19,19 @@ public class GameResultDataSO : GoogleSheetDataBase
 
 #if UNITY_EDITOR
     [Button]
-    public override void ConvertJsonToData()
+    public override bool TryConvertJsonToData()
     {
-        resultDataList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GameResultData>>(json);
-
-        EditorUtility.SetDirty(this);
+        try
+        {
+            resultDataList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GameResultData>>(json);
+            EditorUtility.SetDirty(this);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[GameResultDataSO] JSON 轉換失敗：{e.Message}");
+            return false;
+        }
     }
 #endif
 }
